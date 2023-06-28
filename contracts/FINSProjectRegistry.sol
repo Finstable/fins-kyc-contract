@@ -5,18 +5,12 @@ import "./interfaces/IFINSProjectRegistry.sol";
 
 contract FINSProjectRegistry is IFINSProjectRegistry, Ownable {
     event ProjectAdded(string name, address[] contractAddresses);
-
-    event ProjectContractAddressAdded(
-        uint256 projectId,
-        address contractAddress
-    );
-
+    event ProjectContractAdded(uint256 projectId, address contractAddress);
     event ProjectIsActiveSet(uint256 projectId, bool status);
-
     event ProjectAdminSet(address projectAdmin);
 
-    mapping(uint256 => Project) private _kycProject;
-    uint256 public kycProjectCount;
+    mapping(uint256 => Project) private _projects;
+    uint256 public projectCount;
     address public projectAdmin;
 
     constructor(address _projectAdmin) {
@@ -31,32 +25,32 @@ contract FINSProjectRegistry is IFINSProjectRegistry, Ownable {
         _;
     }
 
-    function addKYCProject(
+    function addProject(
         string memory name,
         address[] memory contractAddresses
     ) external onlyProjectAdminOrOwner {
-        _kycProject[kycProjectCount] = Project({
+        _projects[projectCount] = Project({
             projectName: name,
             contractAddresses: contractAddresses,
             isActive: true
         });
-        kycProjectCount++;
+        projectCount++;
         emit ProjectAdded(name, contractAddresses);
     }
 
-    function addProjectContractAddress(
+    function addProjectContract(
         uint256 projectId,
         address contractAddress
     ) external onlyProjectAdminOrOwner {
-        _kycProject[projectId].contractAddresses.push(contractAddress);
-        emit ProjectContractAddressAdded(projectId, contractAddress);
+        _projects[projectId].contractAddresses.push(contractAddress);
+        emit ProjectContractAdded(projectId, contractAddress);
     }
 
     function setProjectIsActive(
         uint256 projectId,
         bool status
     ) external onlyProjectAdminOrOwner {
-        _kycProject[projectId].isActive = status;
+        _projects[projectId].isActive = status;
         emit ProjectIsActiveSet(projectId, status);
     }
 
@@ -65,23 +59,23 @@ contract FINSProjectRegistry is IFINSProjectRegistry, Ownable {
         emit ProjectAdminSet(_projectAdmin);
     }
 
-    function kycProject(
+    function projects(
         uint256 projectId
     ) external view override returns (Project memory) {
-        return (_kycProject[projectId]);
+        return (_projects[projectId]);
     }
 
     function getProjectIsActive(
         address contractAddress
     ) external view returns (bool) {
-        for (uint256 i = 0; i < kycProjectCount; i++) {
+        for (uint256 i = 0; i < projectCount; i++) {
             for (
                 uint256 j = 0;
-                j < _kycProject[i].contractAddresses.length;
+                j < _projects[i].contractAddresses.length;
                 j++
             ) {
-                if (_kycProject[i].contractAddresses[j] == contractAddress) {
-                    return _kycProject[i].isActive;
+                if (_projects[i].contractAddresses[j] == contractAddress) {
+                    return _projects[i].isActive;
                 }
             }
         }

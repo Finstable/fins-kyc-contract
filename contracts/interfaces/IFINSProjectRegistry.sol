@@ -8,18 +8,18 @@ interface IFINSProjectRegistry {
         bool isActive;
     }
 
-    function kycProject(uint256) external view returns (Project memory);
+    function projects(uint256) external view returns (Project memory);
 
-    function kycProjectCount() external view returns (uint256);
+    function projectCount() external view returns (uint256);
 
     function projectAdmin() external view returns (address);
 
-    function addKYCProject(
+    function addProject(
         string memory name,
         address[] memory contractAddresses
     ) external;
 
-    function addProjectContractAddress(
+    function addProjectContract(
         uint256 projectId,
         address contractAddress
     ) external;
