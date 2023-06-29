@@ -29,4 +29,6 @@ interface IFINSProjectRegistry {
     function getProjectIsActive(
         address contractAddress
     ) external view returns (bool);
+
+    function setProjectAdmin(address _projectAdmin) external;
 }
