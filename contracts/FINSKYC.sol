@@ -30,7 +30,7 @@ contract FINSKYC is IFINSKYC, Ownable {
         _;
     }
 
-    function setKYCLevel(
+    function setKYCWallet(
         address walletAddress,
         string memory uid,
         uint256 kycLevel

@@ -15,7 +15,7 @@ interface IFINSKYC {
 
     function kycAdmin() external view returns (address);
 
-    function setKYCLevel(
+    function setKYCWallet(
         address walletAddress,
         string memory uid,
         uint256 kycLevel
